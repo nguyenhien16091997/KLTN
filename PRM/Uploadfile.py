@@ -215,16 +215,28 @@ def handleSubClass(kq, subclass):
 
 def caseForClassification(list, subClass):
     rs = []
-    case = ['Xóa dòng bị thiếu dữ liệu', 'Thay thế giá trị bị thiếu bằng số 0', 'Thay thế giá trị bị thiếu giá trị xuất hiện nhiều nhất', 'Thay thế giá trị bị thiếu bằng giá trị gần nhất']
+    case = ['Xóa dòng bị thiếu dữ liệu', 'Thay thế giá trị bị thiếu bằng số 0', 'Thay thế giá trị bị thiếu giá trị xuất hiện nhiều nhất', 'Thay thế giá trị bị thiếu bằng giá trị gần nhất', 'Dữ liệu gốc']
     for i in range(4):
         ar = handleSubClass(list[i], subClass)
         ar = ar.astype(str)
         ar = np.insert(ar, 0, case[i], axis=1)
         rs.append(ar[0].tolist())
+    ar = handleSubClass(list[17], subClass)
+    ar = ar.astype(str)
+    ar = np.insert(ar, 0, case[4], axis=1)
+    rs.append(ar[0].tolist())
     return rs
 
 def handleMissingValue(input_file, chose, percentMValue):
     df = arrayData(input_file)
+    name_cols = df.columns.values
+
+    time5 = time.time()
+    df_perfect = specifyPN(df.copy().values, name_cols)
+    ram5 = round(psutil.virtual_memory()[2], 2)
+    cpu5 = round(psutil.cpu_percent(), 2)
+    time6 = time.time()
+    t_case5 = round((time6 - time5), 2)
 
     # handle Percent Missing Value
     countNan = df.isna().sum()
@@ -234,7 +246,6 @@ def handleMissingValue(input_file, chose, percentMValue):
     if int(percentMValue) != 0:
         df = handleConvert(df, percentMValue)
 
-    name_cols = df.columns.values
     startTime = time.time()
 
     emptyData = np.array([['Row', 'Name', 'Value', 'Class', 'Laplace'],
@@ -314,7 +325,7 @@ def handleMissingValue(input_file, chose, percentMValue):
         t_case4 = ' '
 
     list = [df_case1, df_case2, df_case3, df_case4, t_case1, t_case2, t_case3, t_case4, df, ram1, ram2, ram3,
-            ram4, cpu1, cpu2, cpu3, cpu4]
+            ram4, cpu1, cpu2, cpu3, cpu4, df_perfect, t_case5, ram5, cpu5]
 
     return list
 
