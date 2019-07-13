@@ -215,16 +215,18 @@ def handleSubClass(kq, subclass):
 
 def caseForClassification(list, subClass):
     rs = []
-    case = ['Xóa dòng bị thiếu dữ liệu', 'Thay thế giá trị bị thiếu bằng số 0', 'Thay thế giá trị bị thiếu giá trị xuất hiện nhiều nhất', 'Thay thế giá trị bị thiếu bằng giá trị gần nhất', 'Dữ liệu gốc']
+
+    ar = handleSubClass(list[17], subClass)
+    if len(ar) == 0:
+        ar = np.array([['none', 'none', 'none']])
+    ar = ar.astype(str)
+    rs.append(ar[0].tolist())
     for i in range(4):
         ar = handleSubClass(list[i], subClass)
+        if len(ar) == 0:
+            ar = np.array([['none', 'none', 'none']])
         ar = ar.astype(str)
-        ar = np.insert(ar, 0, case[i], axis=1)
         rs.append(ar[0].tolist())
-    ar = handleSubClass(list[17], subClass)
-    ar = ar.astype(str)
-    ar = np.insert(ar, 0, case[4], axis=1)
-    rs.append(ar[0].tolist())
     return rs
 
 def handleMissingValue(input_file, chose, percentMValue):
@@ -244,7 +246,7 @@ def handleMissingValue(input_file, chose, percentMValue):
     if int(percentMValue) >= int(sumCountNan):
         percentMValue = int(percentMValue) - int(sumCountNan)
     if int(percentMValue) != 0:
-        df = handleConvert(df, percentMValue)
+        df = handleConvert(df.copy(), percentMValue)
 
     startTime = time.time()
 
@@ -257,8 +259,8 @@ def handleMissingValue(input_file, chose, percentMValue):
     #Handle missing value
     #four case
     if 1 in chose:
-        time1    = time.time()
         ar_case1 = handleIgrpne(df.copy())
+        time1    = time.time()
         df_case1 = specifyPN(ar_case1, name_cols)
         ram1     = round(psutil.virtual_memory()[2], 2)
         cpu1     = round(psutil.cpu_percent(),2)
@@ -269,8 +271,8 @@ def handleMissingValue(input_file, chose, percentMValue):
         cpu1 = ''
 
     if 2 in chose:
-        time2    = time.time()
         ar_case2 = handleReplaceValue0(df.copy())
+        time2    = time.time()
         df_case2 = specifyPN(ar_case2, name_cols)
         ram2 = round(psutil.virtual_memory()[2], 2)
         cpu2 = round(psutil.cpu_percent(), 2)
@@ -281,8 +283,8 @@ def handleMissingValue(input_file, chose, percentMValue):
         cpu2 = ''
 
     if 3 in chose:
-        time3    = time.time()
         ar_case3 = handleReplaceMuch(df.copy())
+        time3    = time.time()
         df_case3 = specifyPN(ar_case3, name_cols)
         ram3 = round(psutil.virtual_memory()[2], 2)
         cpu3 = round(psutil.cpu_percent(), 2)
@@ -293,8 +295,8 @@ def handleMissingValue(input_file, chose, percentMValue):
         cpu3 = ''
 
     if 4 in chose:
-        time4    = time.time()
         ar_case4 = handleReplaceNear(df.copy())
+        time4    = time.time()
         df_case4 = specifyPN(ar_case4, name_cols)
         ram4 = round(psutil.virtual_memory()[2], 2)
         cpu4 = round(psutil.cpu_percent(), 2)

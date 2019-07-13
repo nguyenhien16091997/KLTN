@@ -12,9 +12,9 @@ if __name__ == '__main__':
                [sg.Checkbox('Thay thế giá trị bị thiếu bằng số 0 ', default=False)],
                [sg.Checkbox('Thay thế giá trị bị thiếu giá trị xuất hiện nhiều nhất ', default=False)],
                [sg.Checkbox('Thay thế giá trị bị thiếu bằng giá trị gần nhất ', default=False)],
-               [sg.Text('Dữ liệu bị thiếu giá trị :'), sg.ReadButton('Nhấn vào đây', button_color=('white', 'springgreen4'), key='PcMvalue'), sg.Text('%')],
-               [sg.Text('Phần trăm thiếu giá trị cho dữ liệu'), sg.InputCombo(['0', '5', '10', '20', '30']), sg.Text('%')],
-               [sg.OK(), sg.Cancel(), sg.Text('              ', key='St')]]
+               # [sg.Text('Dữ liệu bị thiếu giá trị :'), sg.ReadButton('Kiểm tra', button_color=('white', 'springgreen4'), key='PcMvalue'), sg.Text('%')],
+               [sg.Text('Phần trăm thiếu giá trị cho dữ liệu'), sg.InputCombo(['5', '10', '20', '30']), sg.Text('%')],
+               [sg.OK(), sg.Cancel()]]
     window1 = sg.Window('PRM',layout1)
 
     temp_Submit = False
@@ -33,7 +33,6 @@ if __name__ == '__main__':
             if values[0] == '':
                 sg.Popup('Vui lòng chọn file mà bạn cần phân tích !')
             else:
-                window1.Element('St').Update('loading...')
                 chose = []
                 for i in range(5):
                     if values[i] == True:
@@ -68,21 +67,22 @@ if __name__ == '__main__':
                             [sg.ReadButton('PHÂN LỚP', button_color=('white', 'springgreen4'), key='Classification'), sg.Text('Dữ bị thiếu: '+values[5]+'%'), sg.Text('Tên file: '+nameFile)],
                             [sg.Text('Xóa dòng có khoảng trắng: ', size=(62, 1)), sg.Text('Thay thế bằng giá trị xuất hiện nhiều nhất cùng thuộc tính: ')],
                             [sg.Table(values=list[0].values.tolist(), headings=list[0].columns.values.tolist(), display_row_numbers=True,
-                                auto_size_columns=False, num_rows=min(7, len(list[0].values.tolist()))),
+                                auto_size_columns=False, num_rows=7),
                                 sg.Table(values=list[1].values.tolist(), headings=list[1].columns.values.tolist(), display_row_numbers=True,
-                                auto_size_columns=False, num_rows=min(7, len(list[1].values.tolist())))],
-                            [sg.Text('Time: {} second'.format(list[4])), sg.Text('Ram: {}%'.format(list[9])), sg.Text('CPU: {}%'.format(list[13])), sg.Text('AVG PAPLACE: {}%'.format(avg1), size=(28, 1)),
-                             sg.Text('Time: {} second'.format(list[5])), sg.Text('Ram: {}%'.format(list[10])), sg.Text('CPU: {}%'.format(list[14])), sg.Text('AVG PAPLACE: {}%'.format(avg2))],
+                                auto_size_columns=False, num_rows=7)],
+                            [sg.Text('Time: {} second'.format(list[4])), sg.Text('Ram: {}%'.format(list[9])), sg.Text('CPU: {}%'.format(list[13]), size=(40, 1)),
+                             sg.Text('Time: {} second'.format(list[5])), sg.Text('Ram: {}%'.format(list[10])), sg.Text('CPU: {}%'.format(list[14]))],
                             [sg.Text('Thay thế bằng số 0: ', size=(62, 1)), sg.Text('Thay thế bằng giá trị lân cận: ')],
                             [sg.Table(values=list[2].values.tolist(), headings=list[2].columns.values.tolist(), display_row_numbers=True,
-                                 auto_size_columns=False, num_rows=min(7, len(list[2].values.tolist()))),
+                                 auto_size_columns=False, num_rows=7),
                                 sg.Table(values=list[3].values.tolist(), headings=list[3].columns.values.tolist(), display_row_numbers=True,
-                                 auto_size_columns=False, num_rows=min(7, len(list[3].values.tolist())))],
-                            [sg.Text('Time: {} second'.format(list[6])), sg.Text('Ram: {}%'.format(list[11])), sg.Text('CPU: {}%'.format(list[15])), sg.Text('AVG PAPLACE: {}%'.format(avg3), size=(28, 1)),
-                             sg.Text('Time: {} second'.format(list[7])), sg.Text('Ram: {}%'.format(list[12])), sg.Text('CPU: {}%'.format(list[16])), sg.Text('AVG PALACE: {}%'.format(avg4))],
+                                 auto_size_columns=False, num_rows=7)],
+                            [sg.Text('Time: {} second'.format(list[6])), sg.Text('Ram: {}%'.format(list[11])), sg.Text('CPU: {}%'.format(list[15]), size=(40, 1)),
+                             sg.Text('Time: {} second'.format(list[7])), sg.Text('Ram: {}%'.format(list[12])), sg.Text('CPU: {}%'.format(list[16]))],
+                            [sg.Text('Tập train: ', size=(62, 1))],
                             [sg.Table(values=list[17].values.tolist(), headings=list[17].columns.values.tolist(), display_row_numbers=True,
-                                 auto_size_columns=False, num_rows=min(7, len(list[17].values.tolist())))],
-                            [sg.Text('Time: {} second'.format(list[18])), sg.Text('Ram: {}%'.format(list[19])), sg.Text('CPU: {}%'.format(list[20])), sg.Text('AVG PALACE: {}%'.format(avg5))]
+                                 auto_size_columns=False, num_rows=7)],
+                            [sg.Text('Time: {} second'.format(list[18])), sg.Text('Ram: {}%'.format(list[19])), sg.Text('CPU: {}%'.format(list[20]))]
 
                 ]
                 #Resuilt after handle with PRM
@@ -117,15 +117,20 @@ if __name__ == '__main__':
                         window3 = sg.Window('PHÂN LỚP').Layout(layout3)
                         while True:
                             event, values = window3.Read()
-                            if event is None or event == 'Exit':  # always check for closed window
+                            if event is None or event == 'Hủy':  # always check for closed window
                                 window3.Close()
                                 break
                             elif event == 'Xong' and len(itemSet) != 0:
                                 nameRs = ['Loại dữ liệu','Lớp', 'Độ chính xác(%)', 'Độ tin cậy(%)']
                                 lrs = caseForClassification(list, itemSet)
-                                layout4 = [[sg.Table(values=lrs, headings=nameRs, display_row_numbers=True,auto_size_columns=False)]]
+                                layout4 = [[sg.Text('Loại dữ liệu', size=(50, 1)), sg.Text('Lớp', size=(10, 1)), sg.Text('Độ chính xác (%)', size=(15, 1)), sg.Text('Độ tin cậy (%)', size=(15, 1))],
+                                           [sg.Text('Dữ liệu gốc', size=(50, 1)), sg.Text(lrs[0][0], size=(10, 1)), sg.Text(lrs[0][1], size=(15, 1)), sg.Text(lrs[0][2], size=(15, 1))],
+                                           [sg.Text('Xóa dòng bị thiếu dữ liệu', size=(50, 1)), sg.Text(lrs[1][0], size=(10, 1)), sg.Text(lrs[1][1], size=(15, 1)), sg.Text(lrs[1][2], size=(15, 1))],
+                                           [sg.Text('Thay thế giá trị bị thiếu bằng số 0', size=(50, 1)), sg.Text(lrs[2][0], size=(10, 1)), sg.Text(lrs[2][1], size=(15, 1)), sg.Text(lrs[2][2], size=(15, 1))],
+                                           [sg.Text('Thay thế giá trị bị thiếu giá trị xuất hiện nhiều nhất', size=(50, 1)), sg.Text(lrs[3][0], size=(10, 1)), sg.Text(lrs[3][1], size=(15, 1)), sg.Text(lrs[3][2], size=(15, 1))],
+                                           [sg.Text('Thay thế giá trị bị thiếu bằng giá trị gần nhất', size=(50, 1)), sg.Text(lrs[4][0], size=(10, 1)), sg.Text(lrs[4][1], size=(15, 1)), sg.Text(lrs[4][2], size=(15, 1))]]
 
-                                window4 = sg.Window('KẾT QUẢ').Layout(layout4).Finalize()
+                                window4 = sg.Window('KẾT QUẢ').Layout(layout4)
                                 window4.Read()
                             else:
                                 for i in column:
