@@ -13,7 +13,7 @@ if __name__ == '__main__':
                [sg.Checkbox('Thay thế giá trị bị thiếu giá trị xuất hiện nhiều nhất ', default=False)],
                [sg.Checkbox('Thay thế giá trị bị thiếu bằng giá trị gần nhất ', default=False)],
                # [sg.Text('Dữ liệu bị thiếu giá trị :'), sg.ReadButton('Kiểm tra', button_color=('white', 'springgreen4'), key='PcMvalue'), sg.Text('%')],
-               [sg.Text('Phần trăm thiếu giá trị cho dữ liệu'), sg.InputCombo(['5', '10', '20', '30']), sg.Text('%')],
+               [sg.Text('Phần trăm thiếu giá trị cho dữ liệu'), sg.InputCombo(['5', '10', '20', '30'], readonly=True), sg.Text('%')],
                [sg.OK(), sg.Cancel()]]
     window1 = sg.Window('PRM',layout1)
 
@@ -70,19 +70,19 @@ if __name__ == '__main__':
                                 auto_size_columns=False, num_rows=7),
                                 sg.Table(values=list[1].values.tolist(), headings=list[1].columns.values.tolist(), display_row_numbers=True,
                                 auto_size_columns=False, num_rows=7)],
-                            [sg.Text('Time: {} second'.format(list[4])), sg.Text('Ram: {}%'.format(list[9])), sg.Text('CPU: {}%'.format(list[13]), size=(40, 1)),
-                             sg.Text('Time: {} second'.format(list[5])), sg.Text('Ram: {}%'.format(list[10])), sg.Text('CPU: {}%'.format(list[14]))],
+                            [sg.Text('Time: {} second'.format(list[4])), sg.Text('Ram: {}%'.format(list[9])), sg.Text('CPU: {}%'.format(list[13])), sg.Text('DKL: {}%'.format(list[21])), sg.Text('DCX: {}%'.format(list[25]), size=(20, 1)),
+                             sg.Text('Time: {} second'.format(list[5])), sg.Text('Ram: {}%'.format(list[10])), sg.Text('CPU: {}%'.format(list[14])), sg.Text('DKL: {}%'.format(list[22])), sg.Text('DCX: {}%'.format(list[26]))],
                             [sg.Text('Thay thế bằng số 0: ', size=(62, 1)), sg.Text('Thay thế bằng giá trị lân cận: ')],
                             [sg.Table(values=list[2].values.tolist(), headings=list[2].columns.values.tolist(), display_row_numbers=True,
                                  auto_size_columns=False, num_rows=7),
                                 sg.Table(values=list[3].values.tolist(), headings=list[3].columns.values.tolist(), display_row_numbers=True,
                                  auto_size_columns=False, num_rows=7)],
-                            [sg.Text('Time: {} second'.format(list[6])), sg.Text('Ram: {}%'.format(list[11])), sg.Text('CPU: {}%'.format(list[15]), size=(40, 1)),
-                             sg.Text('Time: {} second'.format(list[7])), sg.Text('Ram: {}%'.format(list[12])), sg.Text('CPU: {}%'.format(list[16]))],
+                            [sg.Text('Time: {} second'.format(list[6])), sg.Text('Ram: {}%'.format(list[11])), sg.Text('CPU: {}%'.format(list[15])), sg.Text('DKL: {}%'.format(list[23])), sg.Text('DCX: {}%'.format(list[27]), size=(20, 1)),
+                             sg.Text('Time: {} second'.format(list[7])), sg.Text('Ram: {}%'.format(list[12])), sg.Text('CPU: {}%'.format(list[16])), sg.Text('DKL: {}%'.format(list[24])), sg.Text('DCX: {}%'.format(list[28]))],
                             [sg.Text('Tập train: ', size=(62, 1))],
                             [sg.Table(values=list[17].values.tolist(), headings=list[17].columns.values.tolist(), display_row_numbers=True,
                                  auto_size_columns=False, num_rows=7)],
-                            [sg.Text('Time: {} second'.format(list[18])), sg.Text('Ram: {}%'.format(list[19])), sg.Text('CPU: {}%'.format(list[20]))]
+                            [sg.Text('Time: {} second'.format(list[18])), sg.Text('Ram: {}%'.format(list[19])), sg.Text('CPU: {}%'.format(list[20])), sg.Text('DCX: {}%'.format(list[29]))]
 
                 ]
                 #Resuilt after handle with PRM

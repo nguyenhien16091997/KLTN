@@ -22,12 +22,13 @@ def arrayData(input_file):
 
 def EncryptionArray(array):
     d = 1
+    array = array.astype('str')
     for i in range(0, np.size(array[0], axis=0)):
         for j in np.unique(array[:, i]):
             for k in np.where(array[:, i] == j)[0]:
                 array[k][i] = d
             d = d + 1
-    return array
+    return array.astype('int')
 
 
 def CaculateGain(WP, WN, _WP, _WN):
@@ -74,6 +75,15 @@ def CaculateMissingValue(pathFile):
     countNan = df.isna().sum()
     sumCountNan = countNan.values.sum()
     return sumCountNan
+
+def Compare2Array(array_core, df_perfect):
+    dem = 0
+    for i in array_core.values:
+        for y in df_perfect.values:
+            if(i[0] == y[0] and i[1] == y[1] and i[2] == y[2]):
+                dem = dem +1
+
+    return round((dem/len(df_perfect))*100, 2)
 
 def GenneratePN(ATT, P, N):
     PN = np.array([[0, 0]])
@@ -177,6 +187,7 @@ def DeQuy(array_core,x,y):
 def handleSubClass(kq, subclass):
     kq = kq.values
     arrDem = np.array([[0, 0, 0]])
+
     for x in subclass.items():
         for y in kq:
             if x[0] == y[0]:
@@ -209,13 +220,26 @@ def handleSubClass(kq, subclass):
     arrDem = np.delete(arrDem, (0), axis=0)
     arrResult = np.array([[float(0),float(0),float(0)]])
     for x in arrDem:
-        arrResult = np.append(arrResult, [[x[0],float(x[1])/float(x[2]), round((float(x[2])/float(len(subclass)))*100, 2)]], axis = 0)
+        arrResult = np.append(arrResult, [[x[0],round(float(x[1])/float(x[2]), 2), round((float(x[2])/float(len(subclass)))*100, 2)]], axis = 0)
     arrResult = np.delete(arrResult, (0), axis=0)
     return arrResult
 
+def CaculateLaplaceDataSet(name_cols, ar, resuilt):
+
+    header = name_cols
+    itemset = {}
+    count = 0
+    for i in range(int(len(ar)*0.3)):
+        for j in range(len(ar[i])-1):
+            itemset[header[j]] = ar[i][j]
+        rs = handleSubClass(resuilt, itemset)
+        if len(rs) != 0:
+            if rs[0][0] == ar[i][-1]:
+                count = count+1
+    return round((count/(int(len(ar)*0.3)))*100, 2)
+
 def caseForClassification(list, subClass):
     rs = []
-
     ar = handleSubClass(list[17], subClass)
     if len(ar) == 0:
         ar = np.array([['none', 'none', 'none']])
@@ -239,6 +263,7 @@ def handleMissingValue(input_file, chose, percentMValue):
     cpu5 = round(psutil.cpu_percent(), 2)
     time6 = time.time()
     t_case5 = round((time6 - time5), 2)
+    laplace5 = CaculateLaplaceDataSet(name_cols, df.copy().values, df_perfect)
 
     # handle Percent Missing Value
     countNan = df.isna().sum()
@@ -265,10 +290,15 @@ def handleMissingValue(input_file, chose, percentMValue):
         ram1     = round(psutil.virtual_memory()[2], 2)
         cpu1     = round(psutil.cpu_percent(),2)
         time2    = time.time()
+        pc_match1 = Compare2Array(df_case1, df_perfect)
+        laplace1 = CaculateLaplaceDataSet(name_cols, ar_case1, df_case1)
+
     else:
         df_case1 = emptyDF
         ram1 = ''
         cpu1 = ''
+        pc_match1 = ''
+        laplace1 = ''
 
     if 2 in chose:
         ar_case2 = handleReplaceValue0(df.copy())
@@ -277,10 +307,15 @@ def handleMissingValue(input_file, chose, percentMValue):
         ram2 = round(psutil.virtual_memory()[2], 2)
         cpu2 = round(psutil.cpu_percent(), 2)
         time3 = time.time()
+        pc_match2 = Compare2Array(df_case2, df_perfect)
+        laplace2 = CaculateLaplaceDataSet(name_cols, ar_case2, df_case2)
+
     else:
         df_case2 = emptyDF
         ram2 = ''
         cpu2 = ''
+        pc_match2 = ''
+        laplace2 = ''
 
     if 3 in chose:
         ar_case3 = handleReplaceMuch(df.copy())
@@ -289,10 +324,15 @@ def handleMissingValue(input_file, chose, percentMValue):
         ram3 = round(psutil.virtual_memory()[2], 2)
         cpu3 = round(psutil.cpu_percent(), 2)
         time4 = time.time()
+        pc_match3 = Compare2Array(df_case3, df_perfect)
+        laplace3 = CaculateLaplaceDataSet(name_cols, ar_case3, df_case3)
+
     else:
         df_case3 = emptyDF
         ram3 = ''
         cpu3 = ''
+        pc_match3 = ''
+        laplace3 = ''
 
     if 4 in chose:
         ar_case4 = handleReplaceNear(df.copy())
@@ -301,10 +341,15 @@ def handleMissingValue(input_file, chose, percentMValue):
         ram4 = round(psutil.virtual_memory()[2], 2)
         cpu4 = round(psutil.cpu_percent(), 2)
         time5    = time.time()
+        pc_match4 = Compare2Array(df_case4, df_perfect)
+        laplace4 = CaculateLaplaceDataSet(name_cols, ar_case4, df_case4)
+
     else:
         df_case4 = emptyDF
         ram4 = ''
         cpu4 = ''
+        pc_match4 = ''
+        laplace4 = ''
 
     if 1 in chose:
         t_case1  = round((time2 - time1), 2)
@@ -327,7 +372,8 @@ def handleMissingValue(input_file, chose, percentMValue):
         t_case4 = ' '
 
     list = [df_case1, df_case2, df_case3, df_case4, t_case1, t_case2, t_case3, t_case4, df, ram1, ram2, ram3,
-            ram4, cpu1, cpu2, cpu3, cpu4, df_perfect, t_case5, ram5, cpu5]
+            ram4, cpu1, cpu2, cpu3, cpu4, df_perfect, t_case5, ram5, cpu5, pc_match1, pc_match2, pc_match3, pc_match4,
+            laplace1, laplace2, laplace3, laplace4, laplace5]
 
     return list
 
